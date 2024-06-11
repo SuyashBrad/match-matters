@@ -17,42 +17,7 @@ const preferences = [
 
 export default function PreferenceScreen({ navigation }) {
     const [selectedPreferences, setSelectedPreferences] = useState([]);
-    const [userData,setUserData] = useState();
-
-    useEffect(() => {
-       getAllUserData();
-    });
-
-   const getAllUserData = async () => {
-      try {
-        const screens = [
-            'PhoneNum',
-            'Email',
-            'Name',
-            'Age',
-            'Photos',
-            'Preference'
-
-        ];
-
-      let userData = {};
-
-      for(const screenName of screens){
-        const screenData = await getRegistrationProgress(screenName);
-        if(screenData) {
-            userData = {...userData,...screenData};
-        }
-      };
-
-      setUserData(userData)
-
-      } catch (error) {
-        console.log("Error",error);
-      }
-   };
-
-   console.log("data",userData);
-
+   
     const togglePreference = (preference) => {
         if (selectedPreferences.includes(preference)) {
             setSelectedPreferences(selectedPreferences.filter(item => item !== preference));
@@ -61,18 +26,10 @@ export default function PreferenceScreen({ navigation }) {
         }
     };
 
-    useEffect(() => {
-        getRegistrationProgress('Preference').then(progressData => {
-           if(progressData) {
-            setSelectedPreferences(progressData.selectedPreferences || '');
-           }
-        });
-    },[]);
-
     const onPressContinue = () => {
         if (selectedPreferences.length >= 2) {
             saveRegistrationProgress('Preference', { selectedPreferences });
-            navigation.navigate('HomeScreen');
+            navigation.navigate('LastScreen');
         } else {
 
             alert("Please select at least 2 preferences.");

@@ -219,7 +219,7 @@ export default function Login({ navigation }) {
 
         {!showSignInOptions ? (
           <View style={styles.buttonWrapper}>
-               <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
+               <TouchableOpacity onPress={() => navigation.navigate("LastScreen")}>
               <View style={styles.button}>
                 <Text style={styles.buttonText}>Trial</Text>
               </View>

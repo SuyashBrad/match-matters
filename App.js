@@ -19,6 +19,7 @@ import Profile from './HomeScreens/Profile';
 import LikedYou from './HomeScreens/LikedYou';
 import Chat from './HomeScreens/Chat';
 import ForYou from './HomeScreens/ForYou';
+import LastScreen from './Screens/LastScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -92,11 +93,16 @@ const App = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen 
+      name='LastScreen'
+      component={LastScreen}
+      options={{ headerShown: false }}
+      />
+      <Stack.Screen 
       name='HomeScreen'
       component={TabNavigator}
       options={{ headerShown: false }}
       />
-
+      
        </Stack.Navigator>
     </NavigationContainer>
 
@@ -113,15 +119,15 @@ const TabNavigator = () => {
     initialRouteName='HomeScreen'
     screenOptions={{
       tabBarStyle: {
-        height: 90, // Increase this value to make the tab bar taller
-        backgroundColor: 'white', // Change this to any color you want
+        height: 90, 
+        backgroundColor: 'white', 
       },
       tabBarLabelStyle: {
-        fontSize: 12, // Adjust the font size of the tab labels
+        fontSize: 12, 
         fontWeight: "bold"
       },
       tabBarIconStyle: {
-        marginBottom: 5, // Adjust the margin between icon and label
+        marginBottom: 5, 
         marginTop:5,
       },
     }}    
