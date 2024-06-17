@@ -43,36 +43,52 @@ export default function PreferenceScreen({ navigation }) {
 
    
 
-//  const clearAllScreenData = async () => {
-//     try {
-//         const screens = [
-//             'PhoneNum',
-//             'Email',
-//             'Name',
-//             'Age',
-//             'Photos',
-//             'Preference'
+ const clearAllScreenData = async () => {
+    try {
+        const screens = [
+            'PhoneNum',
+            'Email',
+            'Name',
+            'Age',
+            'Photos',
+            'Preference'
 
-//         ];
+        ];
 
-//         for(const screenName of screens){
-//             const key = `registration_progress_${screenName}`;
-//             await AsyncStorage.removeItem(key);
-//         }
+        for(const screenName of screens){
+            const key = `registration_progress_${screenName}`;
+            await AsyncStorage.removeItem(key);
+        }
 
-//         console.log("All Screen Data Was Saved And Cleared For New Users....!!!!")
+        console.log("All Screen Data Was Saved And Cleared For New Users....!!!!")
         
-//     } catch (error) {
-//         console.log("Error", error);
-//     }
-//  } 
+    } catch (error) {
+        console.log("Error", error);
+    }
+ } 
 
     const registerUser = async () => {
 
-        console.log("All The registration Details have been saved in the Async Local Storage for now!!")
+        console.log("All The registration Details have been saved in the Async Local Storage for now!!");
         console.log("data",userData);
-        navigation.navigate('HomeScreen');
+        sendData();
+        clearAllScreenData();
+        navigation.navigate('HomeScreen', {userData});
     };
+
+    sendData = () => {
+      fetch("http://192.168.0.100:4000/register",{
+        method : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData)
+      })
+      console.log("done !");
+    }
+;
+    // console.log("data outside registeruser :",userData); 
+
 
     return (
         <SafeAreaView style={styles.area}>

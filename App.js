@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SplashScreenView from './SplashScreenView';
+// import OnboardingCarousel from './Screens/OnboardingCarousel ';
 import Login from './Screens/Login';
 import SignNumber from './Screens/SignNumber';
 import OtpScreen from './Screens/OtpScreen';
@@ -20,6 +21,7 @@ import LikedYou from './HomeScreens/LikedYou';
 import Chat from './HomeScreens/Chat';
 import ForYou from './HomeScreens/ForYou';
 import LastScreen from './Screens/LastScreen';
+import StartScreen from './Screens/StartScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -46,13 +48,26 @@ const App = () => {
         options={{ headerShown: false }}
       />
     ) : (
+      <>
+
+         <Stack.Screen
+    name="StartScreen"
+    component={StartScreen}
+    options={{ headerShown: false }}
+  />
       <Stack.Screen
         name="Login"
         component={Login}
         options={{ headerShown: false }}
       />
+    
+    </>
+   
+  
     )}
-    <Stack.Screen
+    
+
+      <Stack.Screen
         name="SignNumber"
         component={SignNumber}
         options={{ headerShown: false }}

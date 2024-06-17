@@ -7,6 +7,8 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 
 
+const User = require("./models/user");
+
 const app = express();
 const port = 4000;
 
@@ -20,7 +22,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://bradtech:PyQwI2sNYqR8edhW@cluster0.a4adwdw.mongodb.net/").then(() => {
+mongoose.connect("mongodb+srv://atharv:AtharvBrad@cluster0.lmx3gz5.mongodb.net/").then(() => {
     console.log("Connected To MongoDB");
 }).catch((error) => {
     console.log("Error connecting to MongoDB");
@@ -32,21 +34,20 @@ app.listen(port, () => {
 })
 
 
-const User = require("./models/user");
 
 app.post("/register", async(req,res) => {
     try {
         const userData = req.body;
-
         const newUser = new User(userData);
 
         await newUser.save();
+        res.send("data entered");
 
-        const secretKey = crypto.randomBytes(32).toString("hex");
+        // const secretKey = crypto.randomBytes(32).toString("hex");
 
-        const token  = jwt.sign({userId:newUser._id},secretKey);
+        // const token  = jwt.sign({userId: newUser._id}, secretKey);
 
-        res.status(200).json({token});
+        // res.status(200).json({token});
 
         
     } catch (error) {
@@ -54,3 +55,23 @@ app.post("/register", async(req,res) => {
         res.status(500).json({error:"Internal Server Error"});
     }
 })
+
+app.get("/getAllUser", async (req, res) => {
+    try {
+        const allUser = await User.find({});
+        res.send({status: "ok", data: allUser});
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({status: "error", message: "Internal Server Error"});
+    }
+});
+
+app.get("/getLatestUser", async (req, res) => {
+    try {
+        const latestUser = await User.findOne({}).sort({ _id: -1 }).exec();
+        res.send({ status: "ok", data: latestUser });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ status: "error", message: "Internal Server Error" });
+    }
+});
