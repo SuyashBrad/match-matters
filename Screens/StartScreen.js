@@ -25,7 +25,7 @@ const StartScreen = ({navigation}) => {
 
     <Animated.View style={[styles.container, { opacity: fadeAnimation }]}>
 
-<Swiper style={styles.wrapper} loop={false} showsButtons={true} >
+<Swiper style={styles.wrapper} loop={false} showsButtons={true}>
 
         <View style={styles.slide1}>
         <Video
@@ -43,6 +43,11 @@ const StartScreen = ({navigation}) => {
           <Image source={icon} style={styles.image} />
        
         </View>
+        <TouchableOpacity 
+              style={styles.skipButton} 
+              onPress={() => navigation.navigate('Login')}>
+              <Text style={styles.skipButtonText}>Skip</Text>
+            </TouchableOpacity>
 
         <View style = {styles.bottomText} >
         <Text style={styles.text}>Party & Connect Safely</Text>
@@ -76,6 +81,11 @@ const StartScreen = ({navigation}) => {
           <Image source={icon} style={styles.image} />
 
         </View>
+        <TouchableOpacity 
+              style={styles.skipButton} 
+              onPress={() => navigation.navigate('Login')}>
+              <Text style={styles.skipButtonText}>Skip</Text>
+            </TouchableOpacity>
 
         <View style = {styles.bottomText} >
         <Text style={styles.text}>Meet Friendly Faces</Text>
@@ -107,6 +117,11 @@ const StartScreen = ({navigation}) => {
       <View style={styles.logoWrapper}>
           <Image source={icon} style={styles.image} />
         </View>
+        <TouchableOpacity 
+              style={styles.skipButton} 
+              onPress={() => navigation.navigate('Login')}>
+              <Text style={styles.skipButtonText}>Skip</Text>
+            </TouchableOpacity>
         <View style = {styles.bottomText} >
         <Text style={styles.text}>Secure & Safe Connections</Text>
         <Text style={[styles.text, {fontSize:13}]}>Join our community with confidence. We prioritize your safety with verified profiles and robust security measures.</Text>
@@ -145,7 +160,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
       },
       image: {
-        width: 370,
+        width: 350,
         height: 110,
         resizeMode: "cover",
       },
@@ -199,6 +214,20 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "500",
         color: 'white',
+      },
+      skipButton: {
+        position: "absolute",
+        top: 40,
+        right: 20,
+        // backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderRadius: 5,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+      },
+      skipButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
       },
 
 
