@@ -5,12 +5,15 @@ import { getRegistrationProgress, saveRegistrationProgress } from '../backend/re
 
 export default function ProfilePicScreen({ navigation }) {
     const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
+    const [hasCameraPermission, setHasCameraPermission] = useState(null);
     const [images, setImages] = useState([null, null, null, null]);
 
     useEffect(() => {
         (async () => {
             const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
             setHasGalleryPermission(galleryStatus.status === 'granted');
+            const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
+            setHasCameraPermission(cameraStatus.status === 'granted');
         })();
     }, []);
 
@@ -33,8 +36,28 @@ export default function ProfilePicScreen({ navigation }) {
         }
     };
 
-    if (hasGalleryPermission === false) {
-        return <Text>No Access To Internal Storage</Text>;
+
+    const takeSelfie = async (index) => {
+        let result = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            const newImages = [...images];
+            const emptyIndex = newImages.findIndex(image => image === null);
+            if (emptyIndex !== -1) {
+                newImages[emptyIndex] = result.assets[0].uri;
+                setImages(newImages);
+            }
+        }
+    };
+
+    if (hasGalleryPermission === false || hasCameraPermission === false) {
+        return <Text>No Access To Internal Storage or Camera</Text>;
     }
 
     useEffect(() => {
@@ -91,11 +114,16 @@ export default function ProfilePicScreen({ navigation }) {
                                 </TouchableOpacity>
                             ))}
                         </View>
-                        <TouchableOpacity  onPress={onPressContinue}>
+                        <View style={styles.belowButtons}>
+                        <TouchableOpacity  onPress={() => takeSelfie()}>
                             <View style ={styles.skipButton}>         
-                            <Text style={styles.skipText}>Skip</Text>
+                            <Text style={styles.skipText}>Take Selfie</Text>
                             </View>
                         </TouchableOpacity>
+                        <TouchableOpacity onPress={onPressContinue} style={styles.selfieButton}>
+                                <Text style={styles.selfieText}>Skip</Text>
+                        </TouchableOpacity>
+                        </View>
 
                     </KeyboardAvoidingView>
                 </View>
@@ -153,9 +181,9 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     skipButton: {
-      width:100,
+      width:150,
       height:50,
-      marginLeft: 300,
+      marginLeft: 15,
       borderRadius:35,
       alignItems: 'center',
       justifyContent: 'center',
@@ -166,4 +194,22 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
     },
+        selfieButton: {
+        width: 150,
+        height: 50,
+        marginRight: 15,
+        borderRadius: 35,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#244DB7',
+    },
+    selfieText: {
+        fontSize: 20,
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    belowButtons : {
+        flexDirection: "row",
+        justifyContent : "space-between"
+    }
 });
