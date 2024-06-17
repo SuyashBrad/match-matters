@@ -14,28 +14,58 @@ export default function SignEmail({ navigation }) {
 
     const onChangeEmail = (email) => {
         setEmailId(email);
+        setIsValidEmail(true);
     };
+
+    // useEffect(() => {
+    //   getRegistrationProgress('Email').then(progressData => {
+    //     if(progressData){
+    //       setEmailId(progressData.emailId || '');
+    //     }
+    //   })
+    // });
 
     useEffect(() => {
-      getRegistrationProgress('Email').then(progressData => {
-        if(progressData){
-          setEmailId(progressData.emailId || '');
-        }
-      })
-    });
-
-
-    const onPressContinue = () => {
-        if (emailId && validateEmail(emailId)) {
-          if(emailId.trim() !== ''){
-            saveRegistrationProgress('Email',{emailId});
+      const fetchProgress = async () => {
+          const progressData = await getRegistrationProgress('Email');
+          if (progressData) {
+              setEmailId(progressData.emailId || '');
           }
+      };
+      fetchProgress();
+  }, []);
 
-            navigation.navigate('EmailOTPScreen');
-        } else {
-            setIsValidEmail(false);
-        }
-    };
+
+    // const onPressContinue = () => {
+    //     if (emailId && validateEmail(emailId)) {
+    //       if(emailId.trim() !== ''){
+    //         saveRegistrationProgress('Email',{emailId});
+    //       }
+
+    //         navigation.navigate('EmailOTPScreen');
+    //     } else {
+    //         setIsValidEmail(false);
+    //     }
+    // };
+
+    const onPressContinue = async () => {
+      if (emailId && validateEmail(emailId)) {
+          if (emailId.trim() !== '') {
+              try {
+                  await saveRegistrationProgress('Email', { emailId });
+                  // Clear the input fields
+                  // setEmailId('');
+                  // Navigate to the next screen
+                  navigation.navigate('EmailOTPScreen');
+              } catch (error) {
+                  console.error('Error saving registration progress: ', error);
+              }
+          }
+      } else {
+          setIsValidEmail(false);
+      }
+  };
+
 
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -53,6 +83,12 @@ export default function SignEmail({ navigation }) {
     useEffect(() => {
         textInput.focus();
     }, []);
+
+    // useEffect(() => {
+    //   if (textInput.current) {
+    //       textInput.current.focus();
+    //   }
+    // }, []);
 
     return (
         <SafeAreaView style={styles.area}>
@@ -95,97 +131,6 @@ export default function SignEmail({ navigation }) {
         </SafeAreaView>
     );
 }
-
-
-// export default function SignEmail({navigation}) {
-//     let textInput = useRef(null);
-
-//     const [emailId, setEmailId] = useState();
-//     const [focusInput, setFocusInput] = useState(true);
-  
-  
-//      onChangeEmail = (email) => {
-//       setEmailId(email)
-     
-//      };
-  
-  
-//      const onPressContinue = () => {
-//       if(emailId){
-//         navigation.navigate('EmailOTPScreen')
-//       }
-//      };
-  
-//      const onChangeFocus = () => {
-//       setFocusInput(true);
-//      };
-  
-//      const onChangeBlur = () => {
-//       setFocusInput(false);
-//      };
-  
-  
-//      useEffect (() => {
-//       textInput.focus();
-//      },[]);
-  
-//     return (
-//       <SafeAreaView style={styles.area}> 
-//            <View style={styles.container}>
-      
-  
-//                <KeyboardAvoidingView 
-//                 keyboardVerticalOffset={50}
-//                 behavior= {'padding'}
-//                 style = {styles.containerAvoidingView}
-//                > 
-           
-   
-//            <TouchableOpacity>
-//              <Text    onPress={() => {
-//               navigation.goBack();
-//             }}>Back</Text>
-//            </TouchableOpacity>
-  
-//                 <Text style={styles.headTitle}>Can we get your Email?</Text>
-//                 <Text style={styles.headTag}>We only use Email to make sure everyone on Match Matters is real.</Text>
-//                 <View style={
-//                   [styles.inputContainer,
-//                     {
-//                       borderBottomColor:'#244DB7',
-//                     }
-//                   ]}>
-//                   <View style = {styles.openDialogView}>
-              
-//                 </View>
-//                  <TextInput 
-//                  ref = {(input) => textInput = input}
-//                  style = {styles.emailInputStyle}
-//                  placeholder='Enter Your Email Id' 
-//                  keyboardType='text'
-//                  value={emailId}
-//                  onChangeText={onChangeEmail}
-//                  secureTextEntry = {false}
-//                  onFocus={onChangeFocus}
-//                  onBlur = {onChangeBlur}
-//                  />
-//                 </View>
-  
-//                 <View style={styles.viewBottom}>
-//                   <TouchableOpacity onPress={onPressContinue}>
-//                          <View style = {styles.btnContinue}>
-//                           <Text style = {styles.textContinue}>Continue</Text>
-//                          </View>
-//                   </TouchableOpacity>
-//                 </View>
-  
-//                 </KeyboardAvoidingView>
-  
-  
-//            </View>
-//       </SafeAreaView>
-//     )
-// }
 
 
 

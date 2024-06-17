@@ -51,7 +51,8 @@ export default function EmailOTPScreen({navigation}) {
      }
 
      const onChangeNumber = () => {
-        setInternalVal("")
+        setInternalVal("");
+        navigation.navigate("SignEmail");
      }
 
 
