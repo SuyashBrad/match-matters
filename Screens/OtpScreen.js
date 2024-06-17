@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet,TouchableOpacity, SafeAreaView, KeyboardAvoidingView, TextInput } from 'react-native'
+import { View, Text, Image, StyleSheet,TouchableOpacity, SafeAreaView, KeyboardAvoidingView, TextInput, Platform  } from 'react-native'
 import React, {useEffect, useRef, useState} from 'react';
 
 export default function OtpScreen({navigation}) {
@@ -31,6 +31,18 @@ export default function OtpScreen({navigation}) {
         
     }
 
+  //   const decrementClock = () => {
+  //     setCoundwown((prevCountdown) => {
+  //         if (prevCountdown === 0) {
+  //             setEnableResend(true);
+  //             clearInterval(clockCall);
+  //             return 0;
+  //         } else {
+  //             return prevCountdown - 1;
+  //         }
+  //     });
+  // };
+
     const onChangeText = (val) => {
       setInternalVal(val);
       if(val.length === lengthInput){
@@ -56,9 +68,17 @@ export default function OtpScreen({navigation}) {
 
 
 
-    useEffect (() => {
-        textInput.focus();
-       },[]);
+    // useEffect (() => {
+    //     textInput.focus();
+    //    },[]);
+
+    useEffect(() => {
+      if (textInput.current) {
+          console.log('Focusing text input');
+          textInput.current.focus();
+      }
+  }, []);
+  
  
     return (
       <SafeAreaView style={styles.area}> 
@@ -66,7 +86,8 @@ export default function OtpScreen({navigation}) {
   
                <KeyboardAvoidingView 
                 keyboardVerticalOffset={50}
-                behavior= {'padding'}
+                // behavior= {'padding'}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style = {styles.containerAvoidingView}
                > 
                      
@@ -79,9 +100,10 @@ export default function OtpScreen({navigation}) {
                 <Text style={styles.headTag}>We only use phone number to make sure everyone on Match Matters is real.</Text>
                 
                 <TextInput 
-                 ref={(input) => textInput = input}
+                //  ref={(input) => textInput = input}
+                 ref={textInput}
                  onChangeText={onChangeText}
-                 style = {{width:0, height:0}}
+                 style = {{width:1, height:1, opacity:0}}
                  value = {internalVal}
                  maxLength={lengthInput}
                  returnKeyType= "done"
@@ -91,7 +113,7 @@ export default function OtpScreen({navigation}) {
 
                 <View style = {styles.inputContainer}>
                     {
-                        Array(lengthInput).fill().map((data,index) => (
+                        Array(lengthInput).fill().map((_,index) => (
                             <View 
                             key={index} 
                             style = {[
@@ -102,7 +124,7 @@ export default function OtpScreen({navigation}) {
                             ]}>
                             <Text 
                             style = {styles.cellText}
-                            onPress={() => textInput.focus()} 
+                            onPress={() => textInput.current.focus()} 
                             >
                             {internalVal && internalVal.length > 0 ?  internalVal[index] : " "}
 

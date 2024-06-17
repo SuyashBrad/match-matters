@@ -77,7 +77,7 @@ export default function PreferenceScreen({ navigation }) {
     };
 
     sendData = () => {
-      fetch("http://192.168.0.100:4000/register",{
+      fetch("http://192.168.1.39:4000/register",{
         method : "POST",
         headers: {
           "Content-Type": "application/json",

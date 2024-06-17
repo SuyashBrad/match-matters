@@ -19,7 +19,7 @@ export default function FeedScreen({ navigation }) {
   }, [fadeAnimation]);
 
   useEffect(() => {
-    fetch("http://192.168.0.100:4000/getLatestUser", {
+    fetch("http://192.168.1.39:4000/getLatestUser", {
       method: "GET",    
     })
     .then((res) => res.json())
